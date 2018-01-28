@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hand Motion Controller</title>
+ </head>
+  
+<!-- PHP -->
+
+  <?php
+  
+  	$dbhost = "localhost";
+  	$dbuser = "rohbot";
+  	$dbpasswd = "student";
+  	$dbname = "robot_control";
+  	
+	$con = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname) or die("Connection failed.");
+	
+	$query = "select * from queue";
+	$result = mysqli_query($con, $query);
+	
+	$timeLeft = 0;
+	
+	while($row = mysqli_fetch_array($result)) {
+	
+		$isActive = false;
+		
+		if ($row['username'] == $_SESSION['username']) {
+			if ($timeLeft == 0) {
+				$isActive = true;
+				$timeLeft = $row['time_left'];
+			}
+			break;
+		}
+		
+		$timeLeft += $row['time_left'];
+		
+	}
+	
+	$isActive = false;
+	$timeLeft = 0;
+  ?>
+   
+<!-- CSS -->
+
+<style>
+.button-family {
+  display: block;
+  margin: 25px auto;
+  height: auto;
+  width: auto;
+  text-align: center;
+}
+</style>
+
+<!-- HTML -->
+
+<body>
+
+<!--
+<div class="nav-bar">
+  <ul>
+  	<li><a class="active" href="#home"><div id="some_div"></div></a></li>
+    <li><a class="active" href="#home">Username: </a></li>
+    <li><a class="active" href="#home">Nextup: </a></li>
+    <li style="float:right"><a href='javascript:reset();'>GO!</a></div></li>
+    
+  </ul>
+</div>
+-->
+
+<div class="wrapper">
+	<!--
+	<script id="cid0020000157143977394" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 267px;height: 360px;">{"handle":"wossrobotics","arch":"js","styles":{"a":"CC0000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"CC0000","l":"CC0000","m":"CC0000","n":"FFFFFF","p":"10","q":"CC0000","r":100,"pos":"br","cv":1,"cvbg":"CC0000","cvw":200,"cvh":30,"surl":0,"cnrs":"0.35","ticker":1,"fwtickm":1}}</script>
+	-->
+	
+	<!-- <iframe src="http://streambadge.com/livestream/wossRobotics/" width="700" height="500" display="block" frameborder="5"></iframe> -->
+	
+	<div class="header-text-area" style="display: block; margin: 25px auto; text-align: center";>
+		<div style="font-size: 20px">Welcome!</div>
+		<div style="font-size: 20px">Connect your laptop webcam in order to see the robot hand move according to the commands you input.</div>
+	</div>
+	
+	<iframe class"video-frame" src="https://appear.in/led_control" width="900" height="500" frameborder="5" style="display: block; margin: 0 auto"></iframe>
+	
+	<!-- Load Facebook SDK for JavaScript
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6";
+	fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+
+	<!-- Your embedded video player code 
+	<div class="fb-video" data-href="https://www.facebook.com/facebook/videos/10153231379946729/" data-width="500" data-show-text="false">
+	<div class="fb-xfbml-parse-ignore">
+	  <blockquote cite="https://www.facebook.com/facebook/videos/10153231379946729/">
+		<a href="https://www.facebook.com/facebook/videos/10153231379946729/">How to Share With Just Friends</a>
+		<p>How to share with just friends.</p>
+		Posted by <a href="https://www.facebook.com/facebook/">Facebook</a> on Friday, December 5, 2014
+	  </blockquote>
+	</div>
+	</div>
+   -->
+   <div>
+		<div class="button-family">
+			<span>Enter in finger to move:</span>
+			<input type="text" id="myText" value="">
+			
+		</div>
+		
+		<div class="button-family">
+			<span>Enter in degree to move finger:</span>
+			<input type="text" id="myText2" value="">
+		</div>
+		<button onclick="setState()" style="display: block; margin: 0 auto; width: 150px">Send info</button>
+	</div>
+</div>
+
+<!--
+
+ <div style="padding:20px;margin-top:30px;height:1500px;">
+<p align="center"> 	<!--Used to center text in middle of monitor screen-->
+
+<!--
+<font size="8">		<!--Sets the tex font size to 8 -->
+<!--
+</div>
+
+-->
+
+<script>
+//var timeLeft = <?php echo $timeLeft ?>;
+var timeLeft = 30;
+//var isActive = "<?php echo json_encode($isActive); ?>";
+var isActive = false;
+var elem = document.getElementById('some_div');
+var timerId = setInterval(countdown, 1000);
+var string = 0;
+
+function countdown() {
+    if (timeLeft == -1) {
+        clearTimeout(timerId);
+        doSomething();
+    } else {
+    
+    	if (isActive) {
+    	    var str = 'Time left in turn: ';
+    	} else {
+    	    var str = 'Time left until turn: ';
+    	}
+        elem.innerHTML = str+timeLeft+'s';
+        timeLeft--;
+    }
+}
+
+function reset(){
+  if (timeLeft == -1){
+	timeLeft = 30;
+    elem = document.getElementById('some_div');
+    timerId = setInterval(countdown, 1000);
+  }else{
+  	alert("Not your turn yet!");
+  }
+}
+
+function setState() {
+	var x = document.getElementById("myText").value;
+	var y = document.getElementById("myText2").value;
+	var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "hand.php?state=" + x + "_" + y, true);
+        xhttp.send();
+} 
+  
+</script>
+
+</body>
+</html>
