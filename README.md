@@ -6,6 +6,6 @@ Surgeon's Helping Hand consists of three components. The first is a Leap Motion 
 
 ## Run Instructions: 
 
-Download repo leapjs at https://github.com/leapmotion/leapjs
-Download Leap Motion SDK from https://developer.leapmotion.com/get-started (Orion Beta)
-Run Sample2.0.html
+Download repo leapjs at https://github.com/leapmotion/leapjs </br>
+Download Leap Motion SDK from https://developer.leapmotion.com/get-started (Orion Beta) </br>
+Run Sample2.0.html </br>
